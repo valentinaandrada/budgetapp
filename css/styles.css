@@ -1,127 +1,148 @@
 :root {
-    --clr-primary: #ffffff;
-    --clr-secondary: #cdcdcd;
-    --clr-text: #222034;
-    --clr-bg-purple: #af68ea;
-    --clr-bg-blue: #6c63ff;
-    --clr-accent: #f37b57;
-    
-    --ff-primary: 'Poppins', sans-serif;
+  --clr-primary: #ffffff;
+  --clr-secondary: #cdcdcd;
+  --clr-text: #222034;
+  --clr-bg-purple: #af68ea;
+  --clr-bg-blue: #6c63ff;
+  --clr-accent: #f37b57;
+
+  --ff-primary: "Poppins", sans-serif;
 }
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-
 body {
-    font-family: var(--ff-primary);
-    font-size: 12px;
-    display: flex;
-    height: 100vh;
-    background: linear-gradient(var(--clr-bg-blue), var(--clr-bg-purple));
+  font-family: var(--ff-primary);
+  font-size: 12px;
+  height: 100vh;
+  background: linear-gradient(var(--clr-bg-blue), var(--clr-bg-purple));
 }
 
 .container {
-    background-color: var(--clr-primary);
-    width: 70%;
-    margin: auto;
-    padding: 2rem;
-    border-radius: 2rem;
-    box-shadow: 0.5rem 0.5rem 0.8rem rgba(61, 61, 61, 0.5);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  margin: auto;
+  padding: 1rem;
+  border-radius: 2rem;
+  background-color: var(--clr-primary);
+  box-shadow: 0.5rem 0.5rem 0.8rem rgba(61, 61, 61, 0.5);
 }
 
 .img {
-    width: 100%;
+  width: 100%;
 }
 
 .budget {
-    padding: 2rem 0;
-    text-align: center;
+  padding: 2rem 0;
+  text-align: center;
 }
 
 .total {
-    display: flex;
-    justify-content: space-evenly;
-    padding: 2rem 0;
+  display: flex;
+  justify-content: space-evenly;
+  padding: 2rem 0;
 }
 
 h1 {
-    color: var(--clr-bg-blue);
+  color: var(--clr-bg-blue);
 }
 
 .num {
-    font-weight: bolder;
-    font-size: 1.5rem;
-    color: var(--clr-secondary);
+  font-weight: bolder;
+  font-size: 1.5rem;
+  color: var(--clr-secondary);
 }
 
 .input-btns {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn {
-    margin-top: 1rem;
-    width: 75%;
-    background-color: var(--clr-bg-blue);
-    color: var(--clr-primary);
-    padding: 0.5rem;
-    border: none;
-    border-radius: 0.5rem;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-family: var(--ff-primary);
-    font-weight: bolder;
-    box-shadow: 0.1rem 0.2rem 0.2rem rgba(145, 145, 145, 0.5)
+  margin-top: 1rem;
+  width: 75%;
+  background-color: var(--clr-bg-blue);
+  color: var(--clr-primary);
+  padding: 0.5rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-family: var(--ff-primary);
+  font-weight: bolder;
+  box-shadow: 0.1rem 0.2rem 0.2rem rgba(145, 145, 145, 0.5);
 }
 
 /* Modal: Historial de transacciones */
 
 .history {
-    height: 50vh;
-    margin-top: 3rem;
-    text-align: left;
-}
-
-.input-item {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    margin-top: 0.5rem;
+  min-height: 50%;
+  padding: 3rem;
+  text-align: left;
 }
 
-.input__btn {
-    background: none;
-    border: none;
-    margin-left: 0.5rem;
+.item {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 0.5rem;
 }
 
+.item-btns {
+  text-align: right;
+}
+
+.item-btn {
+  background: none;
+  margin-left: 1rem;
+  border: none;
+  cursor: pointer;
+}
+    
 .icon {
-    width: 1rem;
+  width: 1rem;
 }
+
+.back-btn {
+    display: block;
+    margin: 1rem auto 0;
+    width: 5rem;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Responsive */
 
 @media screen and (min-width: 680px) {
+  .container:first-child {
+    display: flex;
+    margin: auto;
+  }
 
-    .container {
-        display: flex;
-        margin: auto;
-    }
+  .img {
+    width: 50%;
+  }
 
-    .img {
-        width: 50%;
-    }
+  .budget {
+    width: 50%;
+    padding: 2rem;
+  }
 
-    .budget {
-        width: 50%;
-        padding: 2rem;
-    }
-/* 
-    .total {
-        padding: 2rem 2rem;
-    } */
-
+  .item {
+    grid-template-columns: 60% repeat(2, 1fr);
+  }
 }
+

@@ -9,31 +9,41 @@
     <link rel="stylesheet" href="css\styles.css" />
   </head>
   <body>
-
-    <div class="container">
-      <img src="img\hero-img.svg" class="img" alt="Imagen de fondo" />
-      <div class="budget">
-        <div>
-          <h2>Balance</h2>
-          <h1 id="balance">$ 0</h1>
-        </div>
-        <div class="total">
-          <div class="income">
-            <h3>Ingresos</h3>
-            <p class="num" id="income">$ 0</p>
+    <div class="hero">
+      <div class="container">
+        <img src="img\hero-img.svg" class="img" alt="Imagen de fondo" />
+        <div class="budget">
+          <div>
+            <h2>Balance</h2>
+            <h1 id="balance">$ 0</h1>
           </div>
-          <div class="chart"></div>
-          <div class="expense">
-            <h3>Gastos</h3>
-            <p class="num" id="expense">$ 0</p>
+          <div class="total">
+            <div class="income">
+              <h3>Ingresos</h3>
+              <p class="num" id="income">$ 0</p>
+            </div>
+            <div class="chart"></div>
+            <div class="expense">
+              <h3>Gastos</h3>
+              <p class="num" id="expense">$ 0</p>
+            </div>
           </div>
-        </div>
-        <div class="input-btns">
-          <button class="btn income-btn">Añadir un ingreso</button>
-          <button class="btn expense-btn">Añadir un gasto</button>
-          <button class="btn history-btn">Ver historial</button>
+          <div class="input-btns">
+            <button class="btn income-btn">Añadir un ingreso</button>
+            <button class="btn expense-btn">Añadir un gasto</button>
+            <button class="btn history-btn">Ver historial</button>
+          </div>
         </div>
       </div>
+    </div>
+
+    <!-- History -->
+    <div class="container history hidden">
+      <div>
+        <h2 class="title">Historial</h2>
+        <ul class="items-list"></ul>
+      </div>
+      <button class="btn back-btn">Volver</button>
     </div>
 
     <script src="js\script.js"></script>
