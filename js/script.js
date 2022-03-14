@@ -23,7 +23,7 @@ const expenseList = [];
 let totalExpense = 0;
 
 // Historial
-const historyList = document.querySelector(".items-list");
+let historyList = document.querySelector('.items-list');
 
 // Crear objeto para incluir en array
 class Income {
@@ -32,22 +32,30 @@ class Income {
     this.amount = incomeAmount;
   }
 }
+class Expense {
+  constructor(expenseDescription, expenseAmount) {
+    this.description = expenseDescription;
+    this.amount = expenseAmount;
+  }
+}
 
 // Funcionalidad del boton AGREGAR INGRESO
 incomeBtn.addEventListener("click", function () {
+
   // Creacion objeto INGRESO
-  incomeDescription = prompt("Ingresar descripcion");
-  incomeAmount = prompt("Por favor, indique el monto a añadir como ingreso");
+  incomeDescription = prompt("Ingresar descripción de INGRESO").toUpperCase();
+  incomeAmount = prompt(`Por favor, indique el monto que le ha ingresado como ${incomeDescription}`);
 
-  if (isNaN(incomeAmount) ||  expenseDescription === '') {
+  if (isNaN(incomeAmount) || incomeAmount === "" || incomeDescription === '') {
     alert("Por favor, ingrese un monto y descripción válidos");
-  } else {
+  } else if(incomeAmount && incomeDescription){
     incomeList.push(new Income(incomeDescription, incomeAmount));
-
     // Actualizar historial
     updateHistory("+", incomeDescription, incomeAmount, 'green');
+  } else {
+    alert('No se han ingresados datos como ingreso.')
   }
-
+  
   // Suma de ingresos para mostrar en pantalla
   let sumIncome = 0;
   for (let i = 0; i < incomeList.length; i++) {
@@ -56,7 +64,6 @@ incomeBtn.addEventListener("click", function () {
 
   // Actualizar varaiable total de ingresos para balance
   totalIncome = sumIncome;
-  console.log(`La suma de ingresos es ${totalIncome}.`);
 
   // Mostrar totalidad de ingresos en pantalla
   showIncome.textContent = `$ ${totalIncome}`;
@@ -65,25 +72,22 @@ incomeBtn.addEventListener("click", function () {
   updateBalance();
 });
 
-class Expense {
-  constructor(expenseDescription, expenseAmount) {
-    this.description = expenseDescription;
-    this.amount = expenseAmount;
-  }
-}
 
 // Funcionalidad del boton AGREGAR GASTO
 expenseBtn.addEventListener("click", function () {
-  // Creacion objeto GASTO
-  expenseDescription = prompt("Ingresar descripcion");
-  expenseAmount = prompt("Por favor, indique el monto a añadir como ingreso");
 
-  if (isNaN(expenseAmount) ||  expenseDescription === '') {
+  // Creacion objeto GASTO
+  expenseDescription = prompt("Ingresar descripción de GASTO").toUpperCase();
+  expenseAmount = prompt(`Por favor, indique el monto que ha gastado en ${expenseDescription}`);
+
+  if (isNaN(expenseAmount) || expenseAmount === "" ||  expenseDescription === "") {
     alert("Por favor, ingrese un monto y descripción válidos");
-  } else {
+  } else if(expenseAmount && expenseDescription){
     expenseList.push(new Expense(expenseDescription, expenseAmount));
     //Actualizar historial
     updateHistory("-", expenseDescription, expenseAmount, 'red');
+  } else {
+    alert('No se han ingresado datos como gasto.')
   }
 
   // Suma de gastos para mostrar en pantalla
@@ -94,7 +98,6 @@ expenseBtn.addEventListener("click", function () {
 
   // Actualizar varaiable total de gastos para balance
   totalExpense = sumExpense;
-  console.log(`La suma de gastos es ${totalExpense}.`);
 
   // Mostrar totalidad de gastos en pantalla
   showExpense.textContent = `$ ${totalExpense}`;
@@ -108,18 +111,54 @@ expenseBtn.addEventListener("click", function () {
 function updateBalance() {
   // Operación para conocer el balance entre ingresos y egresos
   balance = totalIncome - totalExpense;
-
+  
   // Mostrar balance en pantalla
   showBalance.textContent = `$ ${balance}`;
-
+  
   // Alertar si la cuenta tiene un balance negativo
   if (balance < 0) {
     showBalance.style.color = "red";
     alert("El saldo de su cuenta es negativo.");
   }
-}
 
-// **** History
+  /********* DESAFIO ARRAYS **********/
+  
+  console.clear();
+  let date = new Date();
+
+  // Display listado de inputs separados por categoria
+  
+  let listIncomeItems = [];
+  let listExpenseItems = [];
+  
+  for (let item of incomeList.values()) {
+    item = `➕ ${item.description} $${item.amount}`;
+    listIncomeItems.push(item);
+  }
+
+  displayList(listIncomeItems, 'INGRESOS');
+  
+  for (let item of expenseList.values()) {
+    item = `➖ ${item.description} $${item.amount}`;
+    listExpenseItems.push(item);
+  }
+
+  displayList(listExpenseItems, 'GASTOS')
+  
+  function displayList(list, type) {
+    if(list.length !== 0){
+      console.log(`Listado de ${type.toUpperCase()} al ${date.toUTCString()}\n${list.join('\n')}`);
+    } else {
+      console.log(`⚠️ SIN ${type.toUpperCase()} al ${date.toUTCString()}`);
+    }  
+  }
+
+  // Display listado de inputs totales
+
+  let totalList = listIncomeItems.concat(listExpenseItems);
+  displayList(totalList, 'INGRESOS y GASTOS TOTALES')
+  
+}
 
 // Variables pestañas
 const heroDisplay = document.querySelector(".hero");
@@ -150,9 +189,5 @@ function updateHistory(type, description, amount, color) {
                     </div>
                 </li>`;
 
-  historyList.innerHTML += input;
-  console.log(historyList.input)
+  historyList.insertAdjacentHTML('afterbegin', input);
 }
-
-
-
