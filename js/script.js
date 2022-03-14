@@ -183,15 +183,18 @@ backBtn.addEventListener("click", function () {
 });
 
 function updateHistory(type, description, amount, color) {
+  const editImgSrc = '../img/icon-edit.png';
+  const deleteImgSrc = '../img/icon-delete.png';
+
   const input = `<li class="item" style="color:${color}">
                     <div class='description'>${description}</div>
                     <div class='amount'>${type} $${amount}</div>
                     <div class="item-btns">
                       <div class="item-btn edit-btn">
-                        <img class="icon" src="..\img\icon-edit.png" alt="Boton editar" />
+                        <img class="icon" src="${editImgSrc}" alt="Boton editar" />
                       </div>
                       <div class="item-btn delete-btn">
-                        <img class="icon" src="..\img\icon-delete.png" alt="Boton eliminar" />
+                        <img class="icon" src="${deleteImgSrc}" alt="Boton eliminar" />
                       </div>
                     </div>
                 </li>`;
