@@ -100,11 +100,11 @@ h1 {
 }
 
 .item-btns {
-  text-align: right;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .item-btn {
-  background: none;
   margin-left: 1rem;
   border: none;
   cursor: pointer;
