@@ -181,10 +181,10 @@ function updateHistory(type, description, amount, color) {
                     <div class='amount'>${type} $${amount}</div>
                     <div class="item-btns">
                         <button class="item-btn edit-btn">
-                            <img class="icon" src="../img/icon-edit.png" alt="Boton editar" />
+                            <img class="icon" src=\"../img/icon-edit.png\" alt="Boton editar" />
                         </button>
                         <button class="item-btn delete-btn">
-                            <img class="icon" src="../img/icon-delete.png" alt="Boton eliminar" />
+                            <img class="icon" src=\"../img/icon-delete.png\" alt="Boton eliminar" />
                         </button>
                     </div>
                 </li>`;
