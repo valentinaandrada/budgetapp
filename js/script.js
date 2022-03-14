@@ -180,21 +180,12 @@ function updateHistory(type, description, amount, color) {
                     <div class='description'>${description}</div>
                     <div class='amount'>${type} $${amount}</div>
                     <div class="item-btns">
-<<<<<<< HEAD
-                        <div class="item-btn">
-                            <img class="icon" src=\"../img/icon-edit.png\" alt="Boton editar" />
-                        </div>
-                        <div class="item-btn">
-                            <img class="icon" src=\"../img/icon-delete.png\" alt="Boton eliminar" />
-                        </div>
-=======
-                        <button class="item-btn edit-btn">
-                            <img class="icon" src=\"../img/icon-edit.png\" alt="Boton editar" />
-                        </button>
-                        <button class="item-btn delete-btn">
-                            <img class="icon" src=\"../img/icon-delete.png\" alt="Boton eliminar" />
-                        </button>
->>>>>>> 43c42637713bb3b16739d35f9e1c6971e367377b
+                      <div class="item-btn edit-btn">
+                        <img class="icon" src=\"../img/icon-edit.png\" alt="Boton editar" />
+                      </div>
+                      <div class="item-btn delete-btn">
+                        <img class="icon" src=\"../img/icon-delete.png\" alt="Boton eliminar" />
+                      </div>
                     </div>
                 </li>`;
 
