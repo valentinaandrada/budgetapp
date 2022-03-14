@@ -11,8 +11,8 @@ const incomeBtn = document.querySelector(".income-btn");
 const expenseBtn = document.querySelector(".expense-btn");
 const historyBtn = document.querySelector(".history-btn");
 const backBtn = document.querySelector(".back-btn");
-const editBtn = document.querySelector('.edit-btn');
-const deleteBtn = document.querySelector('.delete-btn');
+const editBtn = document.querySelector(".edit-btn");
+const deleteBtn = document.querySelector(".delete-btn");
 
 // Listado de ingresos + suma de ingresos
 const incomeList = [];
@@ -23,7 +23,7 @@ const expenseList = [];
 let totalExpense = 0;
 
 // Historial
-let historyList = document.querySelector('.items-list');
+let historyList = document.querySelector(".items-list");
 
 // Crear objeto para incluir en array
 class Income {
@@ -41,21 +41,22 @@ class Expense {
 
 // Funcionalidad del boton AGREGAR INGRESO
 incomeBtn.addEventListener("click", function () {
-
   // Creacion objeto INGRESO
   incomeDescription = prompt("Ingresar descripción de INGRESO").toUpperCase();
-  incomeAmount = prompt(`Por favor, indique el monto que le ha ingresado como ${incomeDescription}`);
+  incomeAmount = prompt(
+    `Por favor, indique el monto que le ha ingresado como ${incomeDescription}`
+  );
 
-  if (isNaN(incomeAmount) || incomeAmount === "" || incomeDescription === '') {
+  if (isNaN(incomeAmount) || incomeAmount === "" || incomeDescription === "") {
     alert("Por favor, ingrese un monto y descripción válidos");
-  } else if(incomeAmount && incomeDescription){
+  } else if (incomeAmount && incomeDescription) {
     incomeList.push(new Income(incomeDescription, incomeAmount));
     // Actualizar historial
-    updateHistory("+", incomeDescription, incomeAmount, 'green');
+    updateHistory("+", incomeDescription, incomeAmount, "green");
   } else {
-    alert('No se han ingresados datos como ingreso.')
+    alert("No se han ingresados datos como ingreso.");
   }
-  
+
   // Suma de ingresos para mostrar en pantalla
   let sumIncome = 0;
   for (let i = 0; i < incomeList.length; i++) {
@@ -72,22 +73,26 @@ incomeBtn.addEventListener("click", function () {
   updateBalance();
 });
 
-
 // Funcionalidad del boton AGREGAR GASTO
 expenseBtn.addEventListener("click", function () {
-
   // Creacion objeto GASTO
   expenseDescription = prompt("Ingresar descripción de GASTO").toUpperCase();
-  expenseAmount = prompt(`Por favor, indique el monto que ha gastado en ${expenseDescription}`);
+  expenseAmount = prompt(
+    `Por favor, indique el monto que ha gastado en ${expenseDescription}`
+  );
 
-  if (isNaN(expenseAmount) || expenseAmount === "" ||  expenseDescription === "") {
+  if (
+    isNaN(expenseAmount) ||
+    expenseAmount === "" ||
+    expenseDescription === ""
+  ) {
     alert("Por favor, ingrese un monto y descripción válidos");
-  } else if(expenseAmount && expenseDescription){
+  } else if (expenseAmount && expenseDescription) {
     expenseList.push(new Expense(expenseDescription, expenseAmount));
     //Actualizar historial
-    updateHistory("-", expenseDescription, expenseAmount, 'red');
+    updateHistory("-", expenseDescription, expenseAmount, "red");
   } else {
-    alert('No se han ingresado datos como gasto.')
+    alert("No se han ingresado datos como gasto.");
   }
 
   // Suma de gastos para mostrar en pantalla
@@ -104,17 +109,16 @@ expenseBtn.addEventListener("click", function () {
 
   // Actualizar balance
   updateBalance();
-
 });
 
 // Actualizar balance de ingresos y egresos
 function updateBalance() {
   // Operación para conocer el balance entre ingresos y egresos
   balance = totalIncome - totalExpense;
-  
+
   // Mostrar balance en pantalla
   showBalance.textContent = `$ ${balance}`;
-  
+
   // Alertar si la cuenta tiene un balance negativo
   if (balance < 0) {
     showBalance.style.color = "red";
@@ -122,42 +126,45 @@ function updateBalance() {
   }
 
   /********* DESAFIO ARRAYS **********/
-  
+
   console.clear();
   let date = new Date();
 
   // Display listado de inputs separados por categoria
-  
+
   let listIncomeItems = [];
   let listExpenseItems = [];
-  
+
   for (let item of incomeList.values()) {
     item = `➕ ${item.description} $${item.amount}`;
     listIncomeItems.push(item);
   }
 
-  displayList(listIncomeItems, 'INGRESOS');
-  
+  displayList(listIncomeItems, "INGRESOS");
+
   for (let item of expenseList.values()) {
     item = `➖ ${item.description} $${item.amount}`;
     listExpenseItems.push(item);
   }
 
-  displayList(listExpenseItems, 'GASTOS')
-  
+  displayList(listExpenseItems, "GASTOS");
+
   function displayList(list, type) {
-    if(list.length !== 0){
-      console.log(`Listado de ${type.toUpperCase()} al ${date.toUTCString()}\n${list.join('\n')}`);
+    if (list.length !== 0) {
+      console.log(
+        `Listado de ${type.toUpperCase()} al ${date.toUTCString()}\n${list.join(
+          "\n"
+        )}`
+      );
     } else {
       console.log(`⚠️ SIN ${type.toUpperCase()} al ${date.toUTCString()}`);
-    }  
+    }
   }
 
   // Display listado de inputs totales
 
   let totalList = listIncomeItems.concat(listExpenseItems);
-  displayList(totalList, 'INGRESOS y GASTOS TOTALES')
-  
+  displayList(totalList, "INGRESOS y GASTOS TOTALES");
 }
 
 // Variables pestañas
@@ -180,14 +187,14 @@ function updateHistory(type, description, amount, color) {
                     <div class='description'>${description}</div>
                     <div class='amount'>${type} $${amount}</div>
                     <div class="item-btns">
-                        <div class="item-btn">
-                            <img class="icon" src="..\img\icon-edit.png" alt="Boton editar" />
-                        </div>
-                        <div class="item-btn">
-                            <img class="icon" src="..\img\icon-delete.png" alt="Boton eliminar" />
-                        </div>
+                      <div class="item-btn edit-btn">
+                        <img class="icon" src="..\img\icon-edit.png" alt="Boton editar" />
+                      </div>
+                      <div class="item-btn delete-btn">
+                        <img class="icon" src="..\img\icon-delete.png" alt="Boton eliminar" />
+                      </div>
                     </div>
                 </li>`;
 
-  historyList.insertAdjacentHTML('afterbegin', input);
+  historyList.insertAdjacentHTML("afterbegin", input);
 }
