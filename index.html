@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css\styles.css" />
   </head>
   <body>
+    <!-- Hero -->
     <div class="hero">
       <div class="container">
         <img src="img\hero-img.svg" class="img" alt="Imagen de fondo" />
@@ -28,25 +29,67 @@
               <p class="num" id="expense">$ 0</p>
             </div>
           </div>
-          <div class="input-btns">
-            <button class="btn income-btn">Añadir un ingreso</button>
-            <button class="btn expense-btn">Añadir un gasto</button>
-            <button class="btn history-btn">Ver historial</button>
+          <div class="btns">
+            <button class="btn input-btn">Añadir</button>
+            <button class="btn history-btn">Historial</button>
+            <button class="btn analysis-btn">Analiticas</button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- History -->
-    <div class="container history hidden">
-      <div>
-        <h2 class="title">Historial</h2>
-        <ul class="items-list">
-          <li class="item">
-         </li>
-        </ul>
+    <!-- Input Form -->
+    <div class="modal-bg input-form hidden">
+      <div class="container input-container">
+        <button class="btn back-btn" onclick="closeModal(input)">x</button>
+        <form id="form">
+          <h3>Categoría</h3>
+          <select name="input-type" class="input" id="type" >
+            <option value="income" selected>INGRESO</option>
+            <option value="expense">GASTO</option>
+          </select>
+          <h3>Descripción</h3>
+          <input
+            type="text"
+            class="input"
+            name="description"
+            id="description"
+            required
+          />
+          <h3>Monto</h3>
+          <input
+            class="input"
+            type="text"
+            name="amount"
+            id="amount"
+            pattern="^[0-9]+"
+            required
+          />
+          <button type="submit" class="btn add-btn" id="add-input">
+            guardar
+          </button>
+        </form>
       </div>
-      <button class="btn back-btn">Volver</button>
+    </div>
+
+    <!-- History -->
+    <div class="modal-bg history hidden">
+      <div class="container history-container">
+        <button class="btn back-btn" onclick="closeModal(history)">x</button>
+        <div>
+          <h2 class="title">Historial</h2>
+          <ul class="items-list"></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Alert -->
+    <div class="modal-bg alert hidden">
+      <div class="alert-container">
+        <button class="btn back-btn" onclick="closeModal(alertMessage)"">x</button>
+        <h1>!</h1>
+        <p id="alert-message">Este es un mensaje de alerta</p><br>
+      </div>
     </div>
 
     <script src="js\script.js"></script>
