@@ -6,11 +6,6 @@
   --clr-bg-blue: #6c63ff;
   --clr-accent: #f37b57;
 
-  /* Dark mode */
-  --clr-dark-primary: #121212;
-  --clr-dark-secondary: #272727;
-  --clr-dark-text: #ffffff;
-
   /* Fonts */
   --ff-primary: "Poppins", sans-serif;
 }
@@ -26,6 +21,7 @@ body {
   font-size: 12px;
   height: 100vh;
   background: linear-gradient(var(--clr-bg-blue), var(--clr-bg-purple));
+  color: var(--clr-text);
 }
 
 /* General styles */
@@ -69,19 +65,6 @@ body {
   background-color: var(--clr-bg-purple);
 }
 
-.settings-btn {
-  width: 1.5rem;
-  position: relative;
-  right: -95%;
-  transform: translateX(-50%);
-  border-radius: 2rem;
-  margin-bottom: 2rem;
-  cursor: pointer;
-}
-
-.settings-btn:hover {
-  width: 1.6rem;
-}
 
 .back-btn {
   width: auto;
@@ -92,13 +75,63 @@ body {
   border-radius: 2rem;
 }
 
+/* Dropdown menu */
 
+.dropdown {
+  position: absolute;
+  left: 5%;
+
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.dropdown-btn img {
+  width: 1.5rem;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  background-color: var(--clr-bg-blue);
+  padding: 1rem;
+  min-width: 10rem;
+  border-radius: 0 1rem 1rem 1rem;
+  color: var(--clr-primary);
+  cursor: pointer;
+}
+
+
+.menu-item {
+  display: flex;
+  padding: 0.3rem 0;
+  align-items: center;
+}
+
+.menu-item:hover {
+  font-weight: bold;
+}
+
+.menu-icon {
+  width: 1.5rem;
+  margin-right: 0.5rem;
+}
 
 /* Hero */
 
 .img {
   width: 100%;
+  margin-top: 2.5rem;
 }
+
 
 .budget {
   padding: 2rem 0;
@@ -237,13 +270,11 @@ option {
 
   .img {
     width: 50%;
+    margin: 0;
   }
 
-  .settings-btn {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    transform: translate(0);
+  .dropdown {
+    left: 1rem;
   }
 
   .budget {

@@ -19,7 +19,6 @@ const alertMessage = document.querySelector(".alert");
 const edition = document.querySelector(".edition");
 
 // Resultados
-const inputList = [];
 let totalIncome = 0;
 let totalExpense = 0;
 let showIncome = document.getElementById("income");
@@ -27,14 +26,28 @@ let showExpense = document.getElementById("expense");
 let showBalance = document.getElementById("balance");
 const historyList = document.querySelector(".items-list");
 
+
 // Botones
 const inputBtn = document.querySelector(".input-btn");
 const addInput = document.getElementById("add-input");
 const historyBtn = document.querySelector(".history-btn");
 const analysisBtn = document.querySelector(".analysis-btn");
 
+// Dropdown menu
+const accountInfo = document.getElementById('menu-account');
+const deleteData = document.getElementById('menu-clearall');
+
+
+/* STORAGE:  Si hay datos guardados en Local Storage, 
+  inicializar listado de inputs los datos ya guardados; si no, 
+  inicializar array vacío. */
+let inputList = JSON.parse(localStorage.getItem('inputsSaved')) || [];
+updateBalance();
+
 
 /******* EVENTOS *******/
+
+
 
 // Abrir Formulario
 inputBtn.addEventListener("click", () => {
@@ -82,6 +95,16 @@ historyBtn.addEventListener("click", () => {
 // Editar o eliminar input
 historyList.addEventListener("click", editOrDelete);
 
+// Eliminar datos de Local Storage
+deleteData.addEventListener('click', () => {
+  localStorage.clear();
+  showAlert('Se han eliminado todos los datos.');
+
+  // Actualizar tablero
+  inputList = [];
+  updateBalance();
+});
+
 /******* FUNCIONES *******/
 
 // Actualizar tablero con resultados
@@ -115,6 +138,9 @@ function updateBalance() {
   inputList.forEach((input, index) => {
     updateHistory(input.type, input.description, input.amount, index);
   });
+
+  // Guardar datos en Local Storage
+  localStorage.setItem('inputsSaved', JSON.stringify(inputList));
 }
 
 // Función para actualizar historial
