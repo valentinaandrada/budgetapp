@@ -61,8 +61,6 @@ let expenseList;
 // Abrir Formulario
 inputBtn.addEventListener("click", () => {
   inputModal.classList.remove("hidden");
-
-  filterByType.selectedIndex = null;
   inputType.onchange = showCategories;
 });
 
@@ -202,7 +200,6 @@ function updateHistory(type, description, amount, id) {
 // Función para mostrar categorias
 function showCategories() {
   let value = this.value;
-  console.log(value);
 
   value === "expense"
     ? categories.classList.remove("hidden")
