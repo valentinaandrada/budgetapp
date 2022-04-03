@@ -65,7 +65,6 @@ body {
   background-color: var(--clr-bg-purple);
 }
 
-
 .back-btn {
   width: auto;
   position: absolute;
@@ -80,7 +79,6 @@ body {
 .dropdown {
   position: absolute;
   left: 5%;
-
 }
 
 .dropdown:hover .dropdown-menu {
@@ -109,7 +107,6 @@ body {
   cursor: pointer;
 }
 
-
 .menu-item {
   display: flex;
   padding: 0.3rem 0;
@@ -131,7 +128,6 @@ body {
   width: 100%;
   margin-top: 2.5rem;
 }
-
 
 .budget {
   padding: 2rem 0;
@@ -191,7 +187,6 @@ option {
   color: var(--clr-text);
 }
 
-
 .add-btn {
   width: 6rem;
   margin-bottom: 1rem;
@@ -209,6 +204,31 @@ option {
   border-radius: 2rem 0 2rem 2rem;
 }
 
+.filter {
+  margin: 1rem auto;
+  padding: 0.8rem;
+  background-color: var(--clr-secondary);
+  border-radius: 0.5rem;
+}
+
+.filter-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.2rem 0;
+}
+
+.filter-box {
+  width: 7rem;
+  border: none;
+  text-align: left;
+  padding-left: 0.2rem;
+  background-color: var(--clr-secondary);
+  font-size: 0.8rem;
+  color: var(--clr-bg-blue);
+  cursor: pointer;
+}
+
 .items-list {
   list-style-type: none;
 }
@@ -216,7 +236,17 @@ option {
 .item {
   display: flex;
   justify-content: space-between;
-  padding: 0.5rem 0;
+  padding: 0.5rem 0 0.2rem;
+  border-bottom: 1px solid var(--clr-secondary);
+}
+
+.item-content {
+  display: flex;
+}
+
+.description {
+  padding-right: 1rem;
+  text-transform: capitalize;
 }
 
 .item-btn {
@@ -228,6 +258,11 @@ option {
 
 .item-btn:hover {
   opacity: 0.5;
+}
+
+#print {
+  width: fit-content;
+  margin: 1rem auto 0;
 }
 
 /* Alert */
@@ -246,6 +281,7 @@ option {
 
 .alert h1 {
   color: var(--clr-accent);
+  z-index: 10;
 }
 
 .hidden {
@@ -293,5 +329,24 @@ option {
   .history-container {
     width: 60%;
   }
-  
+}
+
+@media screen and (min-width: 960px) {
+  .filter {
+    display: flex;
+    width: fit-content;
+  }
+
+  .filter-container {
+    padding: 0 0.5rem;
+  }
+
+  .filter-container:last-of-type {
+    border-left: 1px solid var(--clr-text);
+  }
+
+  .filter-box {
+    margin-left: 0.5rem;
+    text-align: center;
+  }
 }

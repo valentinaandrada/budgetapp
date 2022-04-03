@@ -9,21 +9,20 @@
     <link rel="stylesheet" href="css\styles.css" />
   </head>
   <body>
-
     <!-- Hero -->
     <div class="hero">
       <div class="container">
         <div class="dropdown">
-          <button class="dropdown-btn ">
-            <img src="./img/settings.png" alt="Botón de configuración">
+          <button class="dropdown-btn">
+            <img src="./img/settings.png" alt="Botón de configuración" />
           </button>
           <div class="dropdown-menu">
             <div class="menu-item" id="menu-account">
-              <img class="menu-icon" src="./img/menu-account.png" alt="">
+              <img class="menu-icon" src="./img/menu-account.png" alt="" />
               <p>Cuenta</p>
             </div>
             <div class="menu-item" id="menu-clearall">
-              <img class="menu-icon" src="./img/menu-deleteall.png" alt="">
+              <img class="menu-icon" src="./img/menu-deleteall.png" alt="" />
               <p>Eliminar datos</p>
             </div>
           </div>
@@ -58,13 +57,24 @@
     <!-- Input Form -->
     <div class="modal-bg input-form hidden">
       <div class="container input-container">
-        <button class="btn back-btn" onclick="closeModal(input)">x</button>
+        <button class="btn back-btn" onclick="closeModal(inputModal)">x</button>
         <form id="form">
-          <h3>Categoría</h3>
-          <select name="input-type" class="input" id="type" >
+          <h3>Tipo</h3>
+          <select name="input-type" class="input" id="type">
             <option value="income" selected>INGRESO</option>
             <option value="expense">GASTO</option>
           </select>
+          <div class="categories hidden">
+            <h3>Categoría</h3>
+            <select name="expense-cat" class="input" id="category">
+              <option value="fixed" selected>Gasto Fijo</option>
+              <option value="food">Mercado</option>
+              <option value="transport">Transporte</option>
+              <option value="personal">Personal</option>
+              <option value="shopping">Compras</option>
+              <option value="out">Salidas</option>
+            </select>
+          </div>
           <h3>Descripción</h3>
           <input
             type="text"
@@ -93,24 +103,38 @@
         <button class="btn back-btn" onclick="closeModal(history)">x</button>
         <div>
           <h2 class="title">Historial</h2>
+          <div class="filter">
+            <div class="filter-container">
+              <p>Filtrar por Tipo</p>
+              <select name="input-type" class="filter-box" id="filter-type">
+                <option value="all" selected>Todos</option>
+                <option value="income">Ingresos</option>
+                <option value="expense">Gastos</option>
+              </select>
+            </div>
+            <div class="filter-container filter-cat hidden">
+              <p>Filtrar por Categoría</p>
+              <select name="filter-cat" class="filter-box" id="filter-cat">
+                <option value="all" selected>Todos</option>
+                <option value="fixed">Gasto Fijo</option>
+                <option value="food">Mercado</option>
+                <option value="transport">Transporte</option>
+                <option value="personal">Personal</option>
+                <option value="shopping">Compras</option>
+                <option value="out">Salidas</option>
+              </select>
+            </div>
+          </div>
           <ul class="items-list"></ul>
         </div>
-      </div>
-    </div>
-
-    <!-- Alert -->
-    <div class="modal-bg alert hidden">
-      <div class="alert-container">
-        <button class="btn back-btn" onclick="closeModal(alertMessage)"">x</button>
-        <h1>!</h1>
-        <p id="alert-message">Este es un mensaje de alerta</p><br>
+        <input type="button" value="resultados" class="btn" id="print" />
       </div>
     </div>
 
     <!-- Edit input -->
     <div class="modal-bg edition hidden">
       <div class="alert-container">
-        <button class="btn back-btn" onclick="closeModal(edition)"">x</button>
+        <button class="btn back-btn" onclick="closeModal(edition)">x</button>
         <form id="edit-form">
           <h4>Nueva Descripción</h4>
           <p class="old old-description">Descripción anterior</p>
@@ -129,10 +153,20 @@
             id="new-amount"
             pattern="^[0-9]+"
           />
-          <button type="submit" class="btn">
-            guardar
-          </button>
+          <button type="submit" class="btn">guardar</button>
         </form>
+      </div>
+    </div>
+
+    <!-- Alert -->
+    <div class="modal-bg alert hidden">
+      <div class="alert-container">
+        <button class="btn back-btn" onclick="closeModal(alertMessage)">
+          x
+        </button>
+        <h1>!</h1>
+        <p id="alert-message">Este es un mensaje de alerta</p>
+        <br />
       </div>
     </div>
 

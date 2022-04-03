@@ -12,57 +12,70 @@ class Input {
 
 let income, expense, balance;
 
-// Modals
-const input = document.querySelector(".input-form");
+// Modals y aperturas
+const inputModal = document.querySelector(".input-form");
 const history = document.querySelector(".history");
 const alertMessage = document.querySelector(".alert");
 const edition = document.querySelector(".edition");
+const categories = document.querySelector(".categories");
+
+// Formularios
+const inputForm = document.getElementById("form");
+const editionForm = document.getElementById("edit-form");
 
 // Resultados
-let totalIncome = 0;
-let totalExpense = 0;
+const historyList = document.querySelector(".items-list");
+const inputType = document.getElementById("type");
 let showIncome = document.getElementById("income");
 let showExpense = document.getElementById("expense");
 let showBalance = document.getElementById("balance");
-const historyList = document.querySelector(".items-list");
-
+let totalIncome = 0;
+let totalExpense = 0;
 
 // Botones
 const inputBtn = document.querySelector(".input-btn");
 const addInput = document.getElementById("add-input");
 const historyBtn = document.querySelector(".history-btn");
 const analysisBtn = document.querySelector(".analysis-btn");
+const resultsBtn = document.getElementById("print");
+
+// Filtros
+const filterByType = document.getElementById("filter-type");
+const filterByCategory = document.getElementById("filter-cat");
+const filterCategoriesBox = document.querySelector(".filter-cat");
 
 // Dropdown menu
-const accountInfo = document.getElementById('menu-account');
-const deleteData = document.getElementById('menu-clearall');
-
+const accountInfo = document.getElementById("menu-account");
+const deleteData = document.getElementById("menu-clearall");
 
 /* STORAGE:  Si hay datos guardados en Local Storage, 
   inicializar listado de inputs los datos ya guardados; si no, 
   inicializar array vacío. */
-let inputList = JSON.parse(localStorage.getItem('inputsSaved')) || [];
+let inputList = JSON.parse(localStorage.getItem("inputsSaved")) || [];
 updateBalance();
-
+let incomeList;
+let expenseList;
 
 /******* EVENTOS *******/
 
-
-
 // Abrir Formulario
 inputBtn.addEventListener("click", () => {
-  input.classList.remove("hidden");
+  inputModal.classList.remove("hidden");
+
+  filterByType.selectedIndex = null;
+  inputType.onchange = showCategories;
 });
 
 // Agregar Input
 addInput.addEventListener("click", () => {
-  input.addEventListener("submit", (e) => {
+  inputModal.addEventListener("submit", (e) => {
     e.preventDefault();
   });
 
-  let inputDescription = document.getElementById("description").value;
-  let inputAmount = document.getElementById("amount").value;
-  let inputType = document.getElementById("type").value;
+  const inputDescription = document.getElementById("description").value;
+  const inputAmount = document.getElementById("amount").value;
+  const expenseCategory = document.getElementById("category").value;
+  let input;
 
   // Validación de datos ingresados
   if (isNaN(inputAmount) || !inputAmount || !inputDescription) {
@@ -71,38 +84,66 @@ addInput.addEventListener("click", () => {
     );
     return;
   } else {
-    // Creación de objeto INPUT + adición a listado
-    const input = inputList.push(
-      new Input(inputType, inputDescription, inputAmount)
-    );
+    // Creación de objeto INPUT
+    input = new Input(inputType.value, inputDescription, inputAmount);
+    if (inputType.value === "expense") {
+      input.category = expenseCategory;
+    }
+
+    inputList.push(input);
   }
 
   // Actualizar balance
   updateBalance();
 
   // Cierre de modal y reseteo de valores de formulario
-  closeModal(input);
-  document.getElementById("form").reset();
-
-  console.log(inputList);
+  closeModal(inputModal);
+  inputForm.reset();
 });
 
 // Abrir Historial
 historyBtn.addEventListener("click", () => {
   history.classList.remove("hidden");
+
+  // Resetear valor por defecto en filtros
+  filterByType.selectedIndex = null;
+  filterByCategory.selectedIndex = null;
 });
 
 // Editar o eliminar input
 historyList.addEventListener("click", editOrDelete);
 
 // Eliminar datos de Local Storage
-deleteData.addEventListener('click', () => {
+deleteData.addEventListener("click", () => {
   localStorage.clear();
-  showAlert('Se han eliminado todos los datos.');
+  showAlert("Se han eliminado todos los datos.");
 
   // Actualizar tablero
   inputList = [];
   updateBalance();
+});
+
+resultsBtn.addEventListener("click", () => {
+  const incList = [];
+  const expList = [];
+
+  for (let i = 0; i < inputList.length; i++) {
+    const inputObject = inputList[i];
+    // Desestructuración de objeto
+    let { type, amount } = inputObject;
+
+    if (type === "income") {
+      incList.push(amount);
+    } else {
+      expList.push(amount);
+    }
+  }
+
+  const maxIncome = Math.max(...incList);
+  const maxExpense = Math.max(...expList);
+  showAlert(
+    `El ingreso más alto recibido fue de $${maxIncome}, y el mayor gasto fue de $${maxExpense}`
+  );
 });
 
 /******* FUNCIONES *******/
@@ -135,20 +176,20 @@ function updateBalance() {
   clearElement(historyList);
 
   // Actualizar historial
-  inputList.forEach((input, index) => {
-    updateHistory(input.type, input.description, input.amount, index);
-  });
+  showList(inputList);
 
   // Guardar datos en Local Storage
-  localStorage.setItem('inputsSaved', JSON.stringify(inputList));
+  localStorage.setItem("inputsSaved", JSON.stringify(inputList));
 }
 
 // Función para actualizar historial
 function updateHistory(type, description, amount, id) {
-  type = type === "income" ? "+" : "-";
+  type === "income" ? (type = "+") : (type = "-");
   const input = `<li id="${id}" class="item">
+                  <div class="item-content">
                     <div class='description'>${description}</div>
                     <div>${type} $ <span class="amount">${amount}</span></div>
+                  </div>
                     <div class="items-btn">
                     <img class="item-btn" id="edit-btn" src="img/icon-edit.png" alt="Boton editar"/>
                     <img class="item-btn" id="delete-btn" src="img/icon-delete.png" alt="Boton eliminar" />
@@ -156,6 +197,16 @@ function updateHistory(type, description, amount, id) {
                   </li>`;
 
   historyList.insertAdjacentHTML("afterbegin", input);
+}
+
+// Función para mostrar categorias
+function showCategories() {
+  let value = this.value;
+  console.log(value);
+
+  value === "expense"
+    ? categories.classList.remove("hidden")
+    : categories.classList.add("hidden");
 }
 
 // Función para cerrar ventana emergente
@@ -169,11 +220,11 @@ function showAlert(message) {
   alertMessage.classList.remove("hidden");
 
   // Cerrar modal de alerta si con la tecla ESC
-  document.addEventListener('keydown', (e)=>{
-    if (e.key === 'Escape') {
-      alertMessage.classList.add('hidden');
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      alertMessage.classList.add("hidden");
     }
-  })
+  });
 }
 
 // Función para vaciar un elemento
@@ -194,14 +245,12 @@ function calcTotal(type, list) {
   return sum;
 }
 
-// Función para detectar si se apretó botón de editar o borrar 
+// Función para detectar si se apretó botón de editar o borrar
 function editOrDelete(e) {
   // Detectar botón seleccionado
   const targetBtn = e.target;
-  console.log(targetBtn);
   // Alcanzar el elemento ´li´ que contiene a ese botón
   const item = targetBtn.parentNode.parentNode;
-  console.log(item);
 
   if (targetBtn.id == "delete-btn") {
     deleteInput(item);
@@ -221,35 +270,79 @@ function editInput(item) {
   // Open edition modal
   edition.classList.remove("hidden");
 
-  // Encontrar elemento a editar en array 
+  // Encontrar elemento a editar en array
   itemToEdit = inputList[item.id];
 
-  document.querySelector('.old-description').textContent = itemToEdit.description;
-  document.querySelector('.old-amount').textContent = `$${itemToEdit.amount}`;
+  const oldDescription = document.querySelector(".old-description");
+  const oldAmount = document.querySelector(".old-amount");
 
-  document.getElementById("edit-form").addEventListener("submit", (e) => {
+  oldDescription.textContent = itemToEdit.description;
+  oldAmount.textContent = `$${itemToEdit.amount}`;
+
+  editionForm.addEventListener("submit", (e) => {
     e.preventDefault();
 
     let newDescription = document.getElementById("new-description").value;
     let newAmount = parseFloat(document.getElementById("new-amount").value);
 
     // Validación de datos ingresados
-  if (isNaN(newAmount) || !newAmount || !newDescription) {
-    showAlert(
-      "Debe ingresar una descripción y un monto válidos. Por favor, intente nuevamente."
-    );
-    return;
-  } else {
-    // Modificar descripción y monto por nuevos inputs
-    itemToEdit.description = newDescription;
-    itemToEdit.amount = newAmount;
-  }
+    if (isNaN(newAmount) || !newAmount || !newDescription) {
+      showAlert(
+        "Debe ingresar una descripción y un monto válidos. Por favor, intente nuevamente."
+      );
+      return;
+    } else {
+      // Modificar descripción y monto por nuevos inputs
+      itemToEdit.description = newDescription;
+      itemToEdit.amount = newAmount;
+    }
 
     // Actualizar tablero de resultados
     updateBalance();
 
     // Cierre de modal y reseteo de valores de formulario
     closeModal(edition);
-    document.getElementById("edit-form").reset();
+    editionForm.reset();
+  });
+}
+
+// Función para filtrar Historial
+filterByType.onchange = filterHistory;
+function filterHistory() {
+  let value = this.value;
+  console.log(value);
+
+  if (value === "income") {
+    filterCategoriesBox.classList.add("hidden");
+    incomeList = inputList.filter((item) => item.type == value);
+    showList(incomeList);
+  } else if (value === "expense") {
+    filterCategoriesBox.classList.remove("hidden");
+    expenseList = inputList.filter((item) => item.type == value);
+    showList(expenseList);
+    filterByCategory.onchange = filterExpenseListByCategory;
+  } else {
+    filterCategoriesBox.classList.add("hidden");
+    showList(inputList);
+  }
+}
+
+// Filtrar Historial de GASTOS por categoria
+function filterExpenseListByCategory() {
+  let value = this.value;
+
+  if (value === "all") {
+    showList(expenseList);
+  } else {
+    const filteredList = inputList.filter((item) => item.category == value);
+    showList(filteredList);
+  }
+}
+
+// Mostrar historial segun listado
+function showList(list) {
+  clearElement(historyList);
+  list.forEach((input, index) => {
+    updateHistory(input.type, input.description, input.amount, index);
   });
 }
