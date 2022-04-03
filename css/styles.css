@@ -10,6 +10,8 @@
   --ff-primary: "Poppins", sans-serif;
 }
 
+/* General styles */
+
 * {
   margin: 0;
   padding: 0;
@@ -23,8 +25,6 @@ body {
   background: linear-gradient(var(--clr-bg-blue), var(--clr-bg-purple));
   color: var(--clr-text);
 }
-
-/* General styles */
 
 .container {
   position: absolute;
@@ -74,7 +74,7 @@ body {
   border-radius: 2rem;
 }
 
-/* Dropdown menu */
+/* Settings menu */
 
 .dropdown {
   position: absolute;
@@ -288,7 +288,7 @@ option {
   display: none;
 }
 
-/* Edit modal */
+/* Edition modal */
 
 .old {
   color: var(--clr-secondary);
