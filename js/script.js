@@ -182,7 +182,7 @@ function updateBalance() {
 
   // Mostrar balance en pantalla + resumen
   showBalance.textContent = `$ ${balance}`;
-  budget.textContent = `$${balance}`;
+  balance < 0 ? budget.textContent = `$0` : budget.textContent = `$${balance}`;
 
   // Alertar si la cuenta tiene un balance negativo
   if (balance < 0) {
@@ -386,13 +386,17 @@ function chartsCreation() {
     expenseChart.destroy();
   }
 
+  let budget = totalIncome - totalExpense;
+  if (budget < 0) {
+    budget = 0;
+  }
   // Datos y configuración de los gráficos
   const generalData = {
     labels: ["Gastos", "Presupuesto"],
     datasets: [
       {
         label: "General Dataset",
-        data: [totalExpense, totalIncome - totalExpense],
+        data: [totalExpense, budget],
         backgroundColor: ["rgb(205, 205, 205)", "rgb(108, 99, 255)"],
         hoverOffset: 4,
       },
