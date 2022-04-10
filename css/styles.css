@@ -192,9 +192,9 @@ option {
   margin-bottom: 1rem;
 }
 
-/* History */
+/* History / Overview*/
 
-.history-container {
+.history-container, .overview-container {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -265,6 +265,17 @@ option {
   margin: 1rem auto 0;
 }
 
+.chart-container {
+  width: 15rem;
+  margin: auto;
+  text-align: center;
+}
+
+.chart-title {
+  margin: 1.2rem 0;
+  text-transform: uppercase;
+}
+
 /* Alert */
 
 .alert-container {
@@ -326,8 +337,24 @@ option {
     width: 40%;
   }
 
-  .history-container {
+  .history-container, .overview-container {
     width: 60%;
+  }
+
+  .chart-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+  }
+
+  .chart-title:last-of-type {
+    width: 60%;
+    margin: 1.2rem auto;
+  }
+
+  .chart-content {
+    width: 45%;
   }
 }
 

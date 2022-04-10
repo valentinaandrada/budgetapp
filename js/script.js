@@ -15,6 +15,7 @@ let income, expense, balance;
 // Modals y aperturas
 const inputModal = document.querySelector(".input-form");
 const history = document.querySelector(".history");
+const overview = document.querySelector(".overview");
 const alertMessage = document.querySelector(".alert");
 const edition = document.querySelector(".edition");
 const categories = document.querySelector(".categories");
@@ -26,17 +27,21 @@ const editionForm = document.getElementById("edit-form");
 // Resultados
 const historyList = document.querySelector(".items-list");
 const inputType = document.getElementById("type");
-let showIncome = document.getElementById("income");
-let showExpense = document.getElementById("expense");
-let showBalance = document.getElementById("balance");
+const budget = document.getElementById("budget");
+const categoryChart = document.querySelector(".expense-chart");
+const showIncome = document.getElementById("income");
+const showExpense = document.getElementById("expense");
+const showBalance = document.getElementById("balance");
 let totalIncome = 0;
 let totalExpense = 0;
+let generalChart;
+let expenseChart;
 
 // Botones
 const inputBtn = document.querySelector(".input-btn");
 const addInput = document.getElementById("add-input");
 const historyBtn = document.querySelector(".history-btn");
-const analysisBtn = document.querySelector(".analysis-btn");
+const overviewBtn = document.querySelector(".overview-btn");
 const resultsBtn = document.getElementById("print");
 
 // Filtros
@@ -69,6 +74,7 @@ addInput.addEventListener("click", () => {
   inputModal.addEventListener("submit", (e) => {
     e.preventDefault();
   });
+
 
   const inputDescription = document.getElementById("description").value;
   const inputAmount = document.getElementById("amount").value;
@@ -144,6 +150,21 @@ resultsBtn.addEventListener("click", () => {
   );
 });
 
+overviewBtn.addEventListener("click", () => {
+  // No mostrar resumen si no existen datos
+  inputList.length !== 0
+    ? overview.classList.remove("hidden")
+    : showAlert("No hay datos para visualizar");
+
+  // No mostrar gráfico de categorías si no hay datos de gastos
+  totalExpense === 0
+    ? categoryChart.classList.add("hidden")
+    : categoryChart.classList.remove("hidden");
+
+  chartsCreation();
+});
+
+
 /******* FUNCIONES *******/
 
 // Actualizar tablero con resultados
@@ -159,8 +180,9 @@ function updateBalance() {
   // Operación para conocer el balance entre ingresos y egresos
   balance = totalIncome - totalExpense;
 
-  // Mostrar balance en pantalla
+  // Mostrar balance en pantalla + resumen
   showBalance.textContent = `$ ${balance}`;
+  budget.textContent = `$${balance}`;
 
   // Alertar si la cuenta tiene un balance negativo
   if (balance < 0) {
@@ -342,4 +364,106 @@ function showList(list) {
   list.forEach((input, index) => {
     updateHistory(input.type, input.description, input.amount, index);
   });
+}
+
+// Obtener total de gastos por categoría
+function categoryTotal(cat) {
+  const catList = [];
+  inputList.forEach((input) => {
+    if (input.category === cat) {
+      catList.push(input.amount);
+    }
+  });
+
+  const catTotal = catList.reduce((a, b) => a + b, 0);
+  return catTotal;
+}
+
+// Crear gráficos para visualización de datos ingresados
+function chartsCreation() {
+  if (generalChart || expenseChart) {
+    generalChart.destroy();
+    expenseChart.destroy();
+  }
+
+  // Datos y configuración de los gráficos
+  const generalData = {
+    labels: ["Gastos", "Presupuesto"],
+    datasets: [
+      {
+        label: "General Dataset",
+        data: [totalExpense, totalIncome - totalExpense],
+        backgroundColor: ["rgb(205, 205, 205)", "rgb(108, 99, 255)"],
+        hoverOffset: 4,
+      },
+    ],
+  };
+
+  const generalConfig = {
+    type: "doughnut",
+    data: generalData,
+    options: {
+      plugins: {
+        legend: {
+          display: false,
+        },
+      },
+    },
+  };
+
+  const expenseData = {
+    labels: [
+      "Gasto Fijo",
+      "Mercado",
+      "Transporte",
+      "Personal",
+      "Compras",
+      "Salidas",
+    ],
+    datasets: [
+      {
+        label: "General Dataset",
+        data: [
+          categoryTotal("fixed"),
+          categoryTotal("food"),
+          categoryTotal("transport"),
+          categoryTotal("personal"),
+          categoryTotal("shopping"),
+          categoryTotal("out"),
+        ],
+        backgroundColor: [
+          "rgb(74, 71, 163)",
+          "rgb(65, 60, 105)",
+          "rgb(0, 189, 170)",
+          "rgb(98, 30, 129)",
+          "rgb(173, 98, 170)",
+          "rgb(244, 176, 199)",
+        ],
+        hoverOffset: 2,
+      },
+    ],
+  };
+
+  const expenseConfig = {
+    type: "doughnut",
+    data: expenseData,
+    options: {
+      plugins: {
+        legend: {
+          display: false,
+        },
+      },
+    },
+  };
+
+  // Creación de gráficos
+  generalChart = new Chart(
+    document.getElementById("general-chart"),
+    generalConfig
+  );
+
+  expenseChart = new Chart(
+    document.getElementById("expense-chart"),
+    expenseConfig
+  );
 }
