@@ -17,12 +17,20 @@
             <img src="./img/settings.png" alt="Botón de configuración" />
           </button>
           <div class="dropdown-menu">
-            <div class="menu-item" id="menu-account">
-              <img class="menu-icon" src="./img/menu-account.png" alt="" />
-              <p>Cuenta</p>
+            <div class="menu-item" id="menu-currency">
+              <img
+                class="menu-icon"
+                src="./img/menu-currency.png"
+                alt="Cambiar moneda"
+              />
+              <p>Ver balance en otra moneda</p>
             </div>
             <div class="menu-item" id="menu-clearall">
-              <img class="menu-icon" src="./img/menu-deleteall.png" alt="" />
+              <img
+                class="menu-icon"
+                src="./img/menu-deleteall.png"
+                alt="Eliminar datos"
+              />
               <p>Eliminar datos</p>
             </div>
           </div>
@@ -139,7 +147,9 @@
           <h2 class="title">Resumen</h2>
           <div class="chart-container">
             <div class="chart-content">
-              <h3 class="chart-title">Presupuesto disponible: <span id="budget">$0</span></h3>
+              <h3 class="chart-title">
+                Presupuesto disponible: <span id="budget">$0</span>
+              </h3>
               <canvas id="general-chart"></canvas>
             </div>
             <div class="chart-content expense-chart">
@@ -148,6 +158,53 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <!-- Currency exchange -->
+    <div class="modal-bg currency-exchange hidden">
+      <div class="container currency-container">
+        <button class="btn back-btn" onclick="closeModal(currency)">x</button>
+
+        <h3 class="curr-title">Conozca su balance en otra moneda</h3>
+        <div class="curr-boxes">
+          <div class="curr-box">
+            <div class="curr-select">
+              <label for="actual-currency">Balance actual en</label><br />
+              <select
+                name="actual-currency"
+                id="actual-currency"
+                class="currency"
+              >
+                <option value="ARS" selected>ARS: Peso Argentino</option>
+                <option value="USD">USD: Dolar Estadounidense</option>
+                <option value="EUR">EUR: Euro</option>
+                <option value="GBP">GBP: Libra Esterlina</option>
+                <option value="CAD">CAD: Dolar Canadiense</option>
+                <option value="AUD">AUD: Dolar Australiano</option>
+                <option value="JPY">JPY: Yen Japones</option>
+              </select>
+            </div>
+            <h1 id="curr-balance">0</h1>
+          </div>
+
+          <div class="curr-box">
+            <div class="curr-select">
+              <label for="change-currency">Conocer balance en</label><br />
+              <select name="change-currency" id="new-currency" class="currency">
+                <option value="USD" selected>USD: Dolar Estadounidense</option>
+                <option value="ARS">ARS: Peso Argentino</option>
+                <option value="EUR">EUR: Euro</option>
+                <option value="GBP">GBP: Libra Esterlina</option>
+                <option value="CAD">CAD: Dolar Canadiense</option>
+                <option value="AUD">AUD: Dolar Australiano</option>
+                <option value="JPY">JPY: Yen Japones</option>
+              </select>
+            </div>
+            <h1 id="curr-output">0</h1>
+          </div>
+        </div>
+        <button class="btn" id="curr-btn">Convertir</button>
       </div>
     </div>
 

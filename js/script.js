@@ -19,6 +19,7 @@ const overview = document.querySelector(".overview");
 const alertMessage = document.querySelector(".alert");
 const edition = document.querySelector(".edition");
 const categories = document.querySelector(".categories");
+const currency = document.querySelector(".currency-exchange");
 
 // Formularios
 const inputForm = document.getElementById("form");
@@ -39,10 +40,11 @@ let expenseChart;
 
 // Botones
 const inputBtn = document.querySelector(".input-btn");
-const addInput = document.getElementById("add-input");
 const historyBtn = document.querySelector(".history-btn");
 const overviewBtn = document.querySelector(".overview-btn");
 const resultsBtn = document.getElementById("print");
+const addInput = document.getElementById("add-input");
+const convertBtn = document.getElementById("curr-btn");
 
 // Filtros
 const filterByType = document.getElementById("filter-type");
@@ -50,15 +52,23 @@ const filterByCategory = document.getElementById("filter-cat");
 const filterCategoriesBox = document.querySelector(".filter-cat");
 
 // Dropdown menu
-const accountInfo = document.getElementById("menu-account");
+const currencyExchange = document.getElementById("menu-currency");
 const deleteData = document.getElementById("menu-clearall");
+
+// Currency Exchange
+const actualCurrSelector = document.getElementById("actual-currency");
+const newCurrSelector = document.getElementById("new-currency");
+const currencyBalance = document.getElementById("curr-balance");
+const currencyOutput = document.getElementById("curr-output");
+
+const key = "0053658357175035a207a95dbbce66dc22bac9b7";
+const api = `https://api.getgeoapi.com/v2/currency/list?api_key=${key}&format=json`;
 
 /* STORAGE:  Si hay datos guardados en Local Storage, 
   inicializar listado de inputs los datos ya guardados; si no, 
   inicializar array vacío. */
 let inputList = JSON.parse(localStorage.getItem("inputsSaved")) || [];
 updateBalance();
-let incomeList;
 let expenseList;
 
 /******* EVENTOS *******/
@@ -74,7 +84,6 @@ addInput.addEventListener("click", () => {
   inputModal.addEventListener("submit", (e) => {
     e.preventDefault();
   });
-
 
   const inputDescription = document.getElementById("description").value;
   const inputAmount = document.getElementById("amount").value;
@@ -127,6 +136,7 @@ deleteData.addEventListener("click", () => {
   updateBalance();
 });
 
+// Mostrar resultados
 resultsBtn.addEventListener("click", () => {
   const incList = [];
   const expList = [];
@@ -150,6 +160,7 @@ resultsBtn.addEventListener("click", () => {
   );
 });
 
+// Mostrar resumen
 overviewBtn.addEventListener("click", () => {
   // No mostrar resumen si no existen datos
   inputList.length !== 0
@@ -164,6 +175,30 @@ overviewBtn.addEventListener("click", () => {
   chartsCreation();
 });
 
+// Conocer balance en otra moneda
+currencyExchange.addEventListener("click", () => {
+  currency.classList.remove("hidden");
+  let symbol;
+  currencyBalance.textContent = `${actualCurrSelector.value} ${balance}`;
+
+  actualCurrSelector.onchange = (e) => {
+    symbol = e.target.value;
+    currencyBalance.textContent = `${symbol} ${balance}`;
+  };
+});
+
+// Convertir balance
+convertBtn.addEventListener("click", () => {
+  fetch(
+    `https://api.getgeoapi.com/v2/currency/convert?api_key=${key}&from=${actualCurrSelector.value}&to=${newCurrSelector.value}&amount=${balance}&format=json`
+  )
+    .then((result) => result.json())
+    .then((result) => {
+      currencyOutput.textContent = `${newCurrSelector.value} ${
+        Object.values(result.rates)[0].rate_for_amount
+      }`;
+    });
+});
 
 /******* FUNCIONES *******/
 
@@ -182,7 +217,9 @@ function updateBalance() {
 
   // Mostrar balance en pantalla + resumen
   showBalance.textContent = `$ ${balance}`;
-  balance < 0 ? budget.textContent = `$0` : budget.textContent = `$${balance}`;
+  balance < 0
+    ? (budget.textContent = `$0`)
+    : (budget.textContent = `$${balance}`);
 
   // Alertar si la cuenta tiene un balance negativo
   if (balance < 0) {
