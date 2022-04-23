@@ -4,9 +4,10 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Control de Gastos</title>
+    <title>Control-O | Controla tus finanzas</title>
 
     <link rel="stylesheet" href="css\styles.css" />
+
   </head>
   <body>
     <!-- Hero -->
@@ -60,13 +61,13 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> 
 
     <!-- Input Form -->
     <div class="modal-bg input-form hidden">
       <div class="container input-container">
         <button class="btn back-btn" onclick="closeModal(inputModal)">x</button>
-        <form id="form">
+        <form id="form" autocomplete="off">
           <h3>Tipo</h3>
           <select name="input-type" class="input" id="type">
             <option value="income">INGRESO</option>
@@ -135,7 +136,31 @@
           </div>
           <ul class="items-list"></ul>
         </div>
-        <input type="button" value="resultados" class="btn" id="print" />
+        <form id="submission-form" method="post">
+          <label for="username"
+            >¿Quieres recibir los datos de tu historial por correo?</label
+          ><br />
+          <input
+            name="username"
+            type="text"
+            class="submit-input"
+            id="user-name"
+            placeholder="nombre"
+          />
+          <input
+            name="email"
+            type="email"
+            class="submit-input"
+            id="user-email"
+            placeholder="mail@example.com"
+          />
+          <input
+            type="button"
+            value="enviar historial"
+            class="btn"
+            id="submit"
+          />
+        </form>
       </div>
     </div>
 
@@ -230,7 +255,7 @@
             id="new-amount"
             pattern="^[0-9]+"
           />
-          <button type="submit" class="btn">guardar</button>
+          <input type="submit" class="btn" value="guardar"></input>
         </form>
       </div>
     </div>
@@ -243,10 +268,14 @@
         </button>
         <h1>!</h1>
         <p id="alert-message">Este es un mensaje de alerta</p>
-        <br />
+        <div class="alert-btns hidden">
+          <button class="btn alert-btn" id="alert-yes">SI</button>
+          <button class="btn alert-btn" id="alert-no" onclick="closeModal(alertMessage)">NO</button>
+        </div>
       </div>
     </div>
 
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="js\script.js"></script>
   </body>

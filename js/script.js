@@ -20,10 +20,12 @@ const alertMessage = document.querySelector(".alert");
 const edition = document.querySelector(".edition");
 const categories = document.querySelector(".categories");
 const currency = document.querySelector(".currency-exchange");
+const alertBtns = document.querySelector('.alert-btns');
 
-// Formularios
+// Formularios / inputs
 const inputForm = document.getElementById("form");
 const editionForm = document.getElementById("edit-form");
+const submissionForm = document.getElementById("submission-form");
 
 // Resultados
 const historyList = document.querySelector(".items-list");
@@ -42,9 +44,11 @@ let expenseChart;
 const inputBtn = document.querySelector(".input-btn");
 const historyBtn = document.querySelector(".history-btn");
 const overviewBtn = document.querySelector(".overview-btn");
-const resultsBtn = document.getElementById("print");
+const submitBtn = document.getElementById("submit");
 const addInput = document.getElementById("add-input");
 const convertBtn = document.getElementById("curr-btn");
+const confirmBtn = document.getElementById('alert-yes');
+const denyBtn = document.getElementById('alert-no');
 
 // Filtros
 const filterByType = document.getElementById("filter-type");
@@ -61,11 +65,9 @@ const newCurrSelector = document.getElementById("new-currency");
 const currencyBalance = document.getElementById("curr-balance");
 const currencyOutput = document.getElementById("curr-output");
 
-const key = "0053658357175035a207a95dbbce66dc22bac9b7";
-const api = `https://api.getgeoapi.com/v2/currency/list?api_key=${key}&format=json`;
 
 /* STORAGE:  Si hay datos guardados en Local Storage, 
-  inicializar listado de inputs los datos ya guardados; si no, 
+  inicializar listado de inputs con los datos ya guardados; si no, 
   inicializar array vacío. */
 let inputList = JSON.parse(localStorage.getItem("inputsSaved")) || [];
 updateBalance();
@@ -76,14 +78,13 @@ let expenseList;
 // Abrir Formulario
 inputBtn.addEventListener("click", () => {
   inputModal.classList.remove("hidden");
-  inputType.onchange = showCategories;
+  categories.classList.add('hidden');
+  inputForm.reset();
 });
 
 // Agregar Input
-addInput.addEventListener("click", () => {
-  inputModal.addEventListener("submit", (e) => {
-    e.preventDefault();
-  });
+addInput.addEventListener("click", (e) => {
+  e.preventDefault();
 
   const inputDescription = document.getElementById("description").value;
   const inputAmount = document.getElementById("amount").value;
@@ -93,7 +94,7 @@ addInput.addEventListener("click", () => {
   // Validación de datos ingresados
   if (isNaN(inputAmount) || !inputAmount || !inputDescription) {
     showAlert(
-      "Debe ingresar una descripción y un monto válidos. Por favor, intente nuevamente."
+      "Debe ingresar una descripción y un monto válidos. Por favor, intente nuevamente.", false
     );
     return;
   } else {
@@ -121,6 +122,8 @@ historyBtn.addEventListener("click", () => {
   // Resetear valor por defecto en filtros
   filterByType.selectedIndex = null;
   filterByCategory.selectedIndex = null;
+
+  submissionForm.reset();
 });
 
 // Editar o eliminar input
@@ -128,36 +131,89 @@ historyList.addEventListener("click", editOrDelete);
 
 // Eliminar datos de Local Storage
 deleteData.addEventListener("click", () => {
-  localStorage.clear();
-  showAlert("Se han eliminado todos los datos.");
-
-  // Actualizar tablero
-  inputList = [];
-  updateBalance();
+  if (!inputList.length == 0) {
+    showAlert("¿Está seguro de querer eliminar todos los datos?", true);
+    confirmBtn.onclick = clearStorage;
+  } else {
+    showAlert('No existen datos guardados.')
+  }
 });
 
 // Mostrar resultados
-resultsBtn.addEventListener("click", () => {
-  const incList = [];
-  const expList = [];
+submitBtn.addEventListener("click", (e) => {
+  e.preventDefault();
 
+  const userEmail = document.getElementById("user-email").value;
+  const userName = document.getElementById("user-name").value;
+  let today = new Date().toISOString().slice(0, 10);
+  let incListPrint = "";
+  let expListPrint = "";
+
+  // Crear listado de ingresos y gastos
   for (let i = 0; i < inputList.length; i++) {
     const inputObject = inputList[i];
     // Desestructuración de objeto
-    let { type, amount } = inputObject;
+    let { type, description, amount } = inputObject;
 
     if (type === "income") {
-      incList.push(amount);
+      incListPrint += `<li style="margin: 0; list-style-type: none">+ $${amount} en concepto de ${description}</li>`;
     } else {
-      expList.push(amount);
+      expListPrint += `<li style="margin: 0; list-style-type: none">- $${amount} en concepto de ${description}</li>`;
     }
   }
 
-  const maxIncome = Math.max(...incList);
-  const maxExpense = Math.max(...expList);
-  showAlert(
-    `El ingreso más alto recibido fue de $${maxIncome}, y el mayor gasto fue de $${maxExpense}`
-  );
+  // Construcción de cuerpo de email
+  const emailBody = `  
+      <div style="margin: 0; padding: 0; box-sizing: border-box; font-family: Poppins, sans-serif; font-size: 14px; background-color: #d7d5d5; color: #777777;">
+        <div style="width: 80%; margin: auto;background-color: #ffffff;">
+          <!-- header -->
+          <div style="background-color: #6c63ff; padding: 12px; text-align: center;">
+            <h2 style="color: #ffffff; line-height: 100%">Tu historial de Control-O</h2>
+          </div>
+          <!-- body -->
+          <div style="padding: 2rem;">
+            <h3 style="color: #333333">Hola ${userName}!</h3>
+            <p>Desde Control-O te enviamos tu historial de transacciones hasta hoy ${today}.</p>
+            <div>
+              <h4 style="color: #333333">INGRESOS:</h4>
+              <ul>${incListPrint}</ul>
+              <p style="font-style: italic; color: #333333">💸 Total de INGRESOS hasta la fecha ${today}: <span style="font-weight: bold">$ ${totalIncome}</span> 💸</p>
+            </div>
+            <div>
+              <h4 style="color: #333333">GASTOS:</h4>
+              <ul>${expListPrint}</ul>
+              <p style="font-style: italic; color: #333333">⚠️ Total de GASTOS hasta la fecha ${today}: <span style="font-weight: bold">$ ${totalExpense}</span> ⚠️</p>
+            </div>
+            <p style="color: #6c63ff;">🚀 Tu presupuesto hasta la fecha ${today} es de <span style="font-weight: bold">$ ${balance}</span> 🚀</p><br>
+            <p style="color: #777777">Saludos,</p>
+            <h4 style="color: #333333">Equipo de Control-O</h4>
+          </div>
+        </div>
+      </div>
+  `;
+
+  // Validación de datos
+  if (!userEmail || !userName) {
+    showAlert(
+      "Ingresa tu nombre y correo para que podamos enviarte tu historial de transacciones.", false
+    );
+    return;
+  } else {
+    Email.send({
+      Host: "smtp.gmail.com",
+      Username: "controloapp.finanzas@gmail.com",
+      Password: "controlo1",
+      To: userEmail,
+      From: "controloapp.finanzas@gmail.com",
+      Subject: "Tu historial de transacciones",
+      Body: emailBody,
+    }).then((message) =>
+      showAlert(
+        `Hemos enviado con éxito tu historial a ${userEmail}. ¡Revisa tu correo!`, false
+      )
+      );
+      submissionForm.reset();
+  }
 });
 
 // Mostrar resumen
@@ -165,7 +221,7 @@ overviewBtn.addEventListener("click", () => {
   // No mostrar resumen si no existen datos
   inputList.length !== 0
     ? overview.classList.remove("hidden")
-    : showAlert("No hay datos para visualizar");
+    : showAlert("No hay datos para visualizar", false);
 
   // No mostrar gráfico de categorías si no hay datos de gastos
   totalExpense === 0
@@ -180,6 +236,7 @@ currencyExchange.addEventListener("click", () => {
   currency.classList.remove("hidden");
   let symbol;
   currencyBalance.textContent = `${actualCurrSelector.value} ${balance}`;
+  currencyOutput.textContent = 0;
 
   actualCurrSelector.onchange = (e) => {
     symbol = e.target.value;
@@ -189,6 +246,10 @@ currencyExchange.addEventListener("click", () => {
 
 // Convertir balance
 convertBtn.addEventListener("click", () => {
+
+  const key = "0053658357175035a207a95dbbce66dc22bac9b7";
+  const api = `https://api.getgeoapi.com/v2/currency/list?api_key=${key}&format=json`;
+
   fetch(
     `https://api.getgeoapi.com/v2/currency/convert?api_key=${key}&from=${actualCurrSelector.value}&to=${newCurrSelector.value}&amount=${balance}&format=json`
   )
@@ -224,7 +285,7 @@ function updateBalance() {
   // Alertar si la cuenta tiene un balance negativo
   if (balance < 0) {
     showBalance.style.color = "#f37b57";
-    showAlert("El saldo de su cuenta es negativo.");
+    showAlert("El saldo de su cuenta es negativo.", false);
   } else {
     showBalance.style.color = "#6c63ff";
   }
@@ -256,8 +317,11 @@ function updateHistory(type, description, amount, id) {
   historyList.insertAdjacentHTML("afterbegin", input);
 }
 
+
 // Función para mostrar categorias
-function showCategories() {
+inputType.onchange = showCategories;
+function showCategories(e) {
+  e.preventDefault();
   let value = this.value;
 
   value === "expense"
@@ -270,11 +334,13 @@ function closeModal(modal) {
   modal.classList.add("hidden");
 }
 
-// Función para mostrar una alerta
-function showAlert(message) {
+// Función para mostrar pop-up con alerta
+function showAlert(message, isToConfirm) {
   document.getElementById("alert-message").innerHTML = message;
   alertMessage.classList.remove("hidden");
 
+  isToConfirm == true ? alertBtns.classList.remove('hidden'): alertBtns.classList.add('hidden');
+  
   // Cerrar modal de alerta si con la tecla ESC
   document.addEventListener("keydown", (e) => {
     if (e.key === "Escape") {
@@ -286,6 +352,16 @@ function showAlert(message) {
 // Función para vaciar un elemento
 function clearElement(element) {
   element.innerHTML = "";
+}
+
+function clearStorage() {
+  localStorage.clear();
+  
+    // Actualizar tablero
+    inputList = [];
+    updateBalance();
+
+    showAlert('Se han eliminado todos los datos introducidos', false)
 }
 
 // Función para calcular total
@@ -340,18 +416,15 @@ function editInput(item) {
 
     let newDescription = document.getElementById("new-description").value;
     let newAmount = parseFloat(document.getElementById("new-amount").value);
+    
 
-    // Validación de datos ingresados
-    if (isNaN(newAmount) || !newAmount || !newDescription) {
-      showAlert(
-        "Debe ingresar una descripción y un monto válidos. Por favor, intente nuevamente."
-      );
-      return;
+    if (newDescription === '' && newAmount === '') {
+      showAlert(`No se han ingresado datos a modificar`);
     } else {
-      // Modificar descripción y monto por nuevos inputs
-      itemToEdit.description = newDescription;
-      itemToEdit.amount = newAmount;
+      itemToEdit.description = newDescription || itemToEdit.description;
+      itemToEdit.amount = newAmount || itemToEdit.amount;
     }
+
 
     // Actualizar tablero de resultados
     updateBalance();
